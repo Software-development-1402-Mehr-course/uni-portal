@@ -26,11 +26,15 @@ class User(models.Model):
 
 
 class Staff(User):
-    pass
+    def __init__(self,*args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.role = Role.STAFF
 
 
 class Professor(User):
-    pass
+    def __init__(self,*args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.role = Role.PROFESSOR
 
 
 class Course(models.Model):
@@ -43,6 +47,10 @@ class Course(models.Model):
 
 class Student(User):
     courses = models.ManyToManyField(Course)
+
+    def __init__(self,*args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.role = Role.STUDENT
 
 
 class Message(models.Model):
