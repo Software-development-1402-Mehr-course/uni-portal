@@ -1,0 +1,30 @@
+<html>
+
+<body>
+    <form action="/phase1/submit_private_message" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Private message</legend>
+            <label for="from">From: </label>
+            <select id="from" name="from">
+                {% for user in from %}
+                <option value={{ user }}> {{ user }} </option>
+                {% endfor %}
+            </select><br>
+
+            <label for="to">To: </label>
+            <select id="to" name="to">
+                {% for user in to %}
+                <option value={{ user }}> {{ user }} </option>
+                {% endfor %}
+            </select><br>
+
+            <label for="message">Message: </label><br>
+            <textarea id="message" name="message" rows="4" cols="50"></textarea><br>
+
+            <input type="submit" value="Submit">
+        </fieldset>
+    </form>
+</body>
+
+</html>

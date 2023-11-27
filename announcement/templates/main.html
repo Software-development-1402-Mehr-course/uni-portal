@@ -1,0 +1,57 @@
+<h1> Hi {{ name }}!</h1>
+{% if is_student %}
+    {% if has_announcement %}
+        <h3> Announcements: </h3>
+        {% for a in announcements %}
+            <strong>{{ a.datetime}}-{{a.sender}}: </strong> {{ a.body }} <br>
+        {% endfor %}
+    {% else %}
+        <p> You have no annoucements. </p>
+    {% endif %}
+
+{% else %}
+<form action="/phase1/submit_announcement" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend>New Annoucement: </legend>
+        <label for="to">To: </label>
+        <select id="to" name="to">
+            {% for course in courses %}
+            <option value={{ course.subject }}> {{ course.subject }} </option>
+            {% endfor %}
+        </select><br>
+
+        <label for="message">Message: </label><br>
+        <textarea id="message" name="message" rows="4" cols="50"></textarea><br>
+
+        <input type="submit" value="Submit">
+    </fieldset>
+</form>
+
+{% endif %}
+
+{% if has_private_message %}
+    <h3> Private Messages: </h3>
+    {% for m in pms %}
+     <strong>{{ m.datetime}}-{{m.sender}}: </strong> {{ m.body }} <br>
+    {% endfor %}
+{% else %}
+    <p> You have no Private Messages. </p>
+{% endif %}
+<form action="/phase1/submit_private_message" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend>New private message</legend>
+        <label for="to">To: </label>
+        <select id="to" name="to">
+            {% for user in users %}
+            <option value={{ user }}> {{ user }} </option>
+            {% endfor %}
+        </select><br>
+
+        <label for="message">Message: </label><br>
+        <textarea id="message" name="message" rows="4" cols="50"></textarea><br>
+
+        <input type="submit" value="Submit">
+    </fieldset>
+</form>

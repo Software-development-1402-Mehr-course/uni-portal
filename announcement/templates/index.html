@@ -1,0 +1,22 @@
+<html>
+
+<body>
+    <h1> Welcome! </h1>
+    <form action="/phase1/main" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Who are you?</legend>
+            <label for="from">Name: </label>
+            <select id="name" name="name">
+                <option value=""> --- </option>
+                {% for user in users %}
+                <option value={{ user }}> {{ user }} </option>
+                {% endfor %}
+            </select><br>
+            <input type="submit" value="Submit">
+        </fieldset>
+    </form>
+
+</body>
+
+</html>
