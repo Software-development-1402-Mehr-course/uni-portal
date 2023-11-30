@@ -1,4 +1,3 @@
-from django.http import request
 from django.shortcuts import redirect
 from django.views.generic import View
 from django.views.generic.base import TemplateView
@@ -17,7 +16,7 @@ class BookListView(TemplateView):
         if search_term:
             books_query = books_query.filter(name__icontains=search_term)
 
-        context["books"] = books_query
+        context["books"] = books_query[:10]
         context["search_term"] = search_term
         return context
 
@@ -35,6 +34,20 @@ class BookReserveView(View):
     def post(self, request, book_id: int):
         book: Book = Book.objects.get(id=book_id)
         book.reserve(request.user.id)
-        book.save()
+
+        return redirect("book_detail", book_id=book_id)
+
+
+class BookTakeView(View):
+    def post(self, _, student_id: int, book_id: int):
+        book: Book = Book.objects.get(id=book_id)
+        book.take(student_id)
+
+        return redirect("book_detail", book_id=book_id)
+
+class BookReturnView(View):
+    def post(self, _, book_id: int):
+        book: Book = Book.objects.get(id=book_id)
+        book.return_back()
 
         return redirect("book_detail", book_id=book_id)

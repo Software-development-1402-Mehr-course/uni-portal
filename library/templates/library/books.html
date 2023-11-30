@@ -10,7 +10,7 @@
   <div class="container">
     <h1>Book List</h1>
       <form class="input-group" action="{% url 'book_list' %}" method="get">
-        <input type="search" name="q" class="form-control" placeholder="Search books" value="{{ search_term }}">
+        <input type="search" name="q" class="form-control" placeholder="Search books" value="{{ search_term|default:'' }}">
       </form>
     <ul class="list-group">
       {% for book in books %}

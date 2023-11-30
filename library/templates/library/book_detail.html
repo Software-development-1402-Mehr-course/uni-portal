@@ -22,6 +22,7 @@
     <p>
         Availability: {{ book.availability }}
     </p>
+      {% if user.student %}
       {% if book.reserved_by_id == request.user.id %}
       <form action="{% url 'book_reserve' book_id=book.id %}" method="post">
         <button type="submit" class="btn btn-primary" disabled="true">Reserved!</button>
@@ -30,6 +31,7 @@
       <form action="{% url 'book_reserve' book_id=book.id %}" method="post">
         <button type="submit" class="btn btn-primary">Reserve</button>
       </form>
+      {% endif %}
       {% endif %}
     </div>
     
