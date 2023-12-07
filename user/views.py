@@ -9,14 +9,11 @@ class LoginView(TemplateView):
 
     def post(self, request):
         user = authenticate(
-            request,
-            username=request.POST["username"],
-            password=request.POST["password"],
+            username=request.POST["username"], password=request.POST["password"]
         )
+        if user:
+            login(request, user)
+            return redirect("check_user")
 
-        if user is None:
-            messages.error(request, "Invalid username or password")
-            return redirect("login")
-
-        login(request, user)
-        return redirect("check_user")
+        messages.error(request, "Wrong username or password")
+        return self.get(self, request)

@@ -18,10 +18,16 @@ from django.contrib import admin
 from django.shortcuts import HttpResponse
 from django.urls import path
 
+from library.views import BookDetailView, BookListView, BookReserveView
 from user.views import LoginView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", LoginView.as_view(), name="login"),
     path("check_user/", lambda request: HttpResponse(request.user), name="check_user"),
+    path("library/", BookListView.as_view(), name="book_list"),
+    path("library/<int:book_id>", BookDetailView.as_view(), name="book_detail"),
+    path(
+        "library/reserve/<int:book_id>/", BookReserveView.as_view(), name="book_reserve"
+    ),
 ]
