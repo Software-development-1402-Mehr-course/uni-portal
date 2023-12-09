@@ -1,9 +1,12 @@
-{% extends "base.html" %}
+{% extends base|default:"base.html" %}
 {% block title %} Book List {% endblock %}
-{% block content %}
+{% block container %}
 <h1>Book List</h1>
 <form class="input-group" action="{% url 'book_list' %}" method="get">
   <input
+    hx-get="."
+    hx-trigger="keyup changed delay:300ms"
+    hx-target="#content"
     type="search"
     name="q"
     class="form-control"
@@ -11,11 +14,13 @@
     value="{{ search_term|default:'' }}"
   />
 </form>
-<ul class="list-group">
+<ul class="list-group" id="content">
+  {% block content %}
   {% for book in books %}
   <a href="{% url 'book_detail' book_id=book.id %}">
     <li class="list-group-item">{{ book.name }}</li>
   </a>
   {% endfor %}
+  {% endblock %}
 </ul>
 {% endblock %}

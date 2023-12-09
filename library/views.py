@@ -2,10 +2,12 @@ from django.shortcuts import redirect
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 
+from common.views import HXViewMixin
+
 from .models import Book
 
 
-class BookListView(TemplateView):
+class BookListView(TemplateView, HXViewMixin):
     template_name = "library/books.html"
 
     def get_context_data(self, **kwargs):
@@ -18,6 +20,10 @@ class BookListView(TemplateView):
 
         context["books"] = books_query[:10]
         context["search_term"] = search_term
+
+        if self.is_hx_request(self.request):
+            context["base"] = "content.html"
+
         return context
 
 
