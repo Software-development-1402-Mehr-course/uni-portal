@@ -1,7 +1,18 @@
 from django.db import models
-from django.utils.translation import gettext
 
 from user.models import Student
+
+class Subject(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+class Author(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Book(models.Model):
@@ -9,8 +20,10 @@ class Book(models.Model):
     booklog_set: models.Manager
 
     name = models.CharField(max_length=100)
-    author = models.CharField(max_length=100)
+    authors = models.ManyToManyField(Author)
     description = models.TextField(null=True)
+    publish_date = models.DateField()
+    subjects = models.ManyToManyField(Subject)
 
     reserved_by = models.ForeignKey(
         Student, null=True, on_delete=models.SET_NULL, related_name="reserved_book"
@@ -48,12 +61,15 @@ class Book(models.Model):
 
     def availability(self) -> str:
         if self.reserved_by:
-            return gettext("Reserved")
+            return "Reserved"
 
         if self.taken_by:
-            return gettext("Taken")
+            return "Taken"
 
-        return gettext("Available")
+        return "Available"
+
+    def authors_string(self) -> str:
+        return " & ".join(author.name for author in self.authors.all())
 
     def __str__(self):
         return super().__str__() + f" : {self.name}"

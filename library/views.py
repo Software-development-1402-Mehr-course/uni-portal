@@ -16,9 +16,11 @@ class BookListView(TemplateView, HXViewMixin):
 
         search_term = self.request.GET.get("q")
         if search_term:
-            books_query = books_query.filter(name__icontains=search_term)
+            search_term: str
+            for word in search_term.split():
+                books_query = books_query.filter(name__icontains=word)
 
-        context["books"] = books_query[:10]
+        context["books"] = books_query[:15]
         context["search_term"] = search_term
 
         if self.is_hx_request(self.request):

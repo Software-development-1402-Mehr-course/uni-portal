@@ -1,2 +1,4 @@
 [tool.pyright]
 exclude = ["**/apps.py"]
+typeChekingMode = "off"
+
