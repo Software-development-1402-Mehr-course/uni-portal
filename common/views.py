@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 class HXViewMixin:
     @dataclass
     class HXHeaders:
@@ -26,4 +27,3 @@ class HXViewMixin:
             h["HX-Trigger-Name"],
             h["HX-Trigger"],
         )
-

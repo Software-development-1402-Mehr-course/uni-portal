@@ -2,11 +2,13 @@ from django.db import models
 
 from user.models import Student
 
+
 class Subject(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
+
 
 class Author(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -35,9 +37,9 @@ class Book(models.Model):
     def reserve(self, student_id: int):
         self.reserved_by_id = student_id
         self.save()
-        
+
         self.booklog_set.create(
-            book=self, log_type = BookLog.LogType.RESERVED, student_id=student_id
+            book=self, log_type=BookLog.LogType.RESERVED, student_id=student_id
         )
 
     def take(self, student_id: int, remove_reservation: bool = False):
@@ -47,17 +49,14 @@ class Book(models.Model):
         self.save()
 
         self.booklog_set.create(
-                book=self, log_type=BookLog.LogType.TAKEN, student_id=student_id
-                )
+            book=self, log_type=BookLog.LogType.TAKEN, student_id=student_id
+        )
 
     def return_back(self):
         self.taken_by_id = None
         self.save()
 
-        self.booklog_set.create(
-                book=self, log_type=BookLog.LogType.RETURNED
-                )
-
+        self.booklog_set.create(book=self, log_type=BookLog.LogType.RETURNED)
 
     def availability(self) -> str:
         if self.reserved_by:
@@ -74,8 +73,8 @@ class Book(models.Model):
     def __str__(self):
         return super().__str__() + f" : {self.name}"
 
-class BookLog(models.Model):
 
+class BookLog(models.Model):
     class LogType(models.IntegerChoices):
         RETURNED = 1
         TAKEN = 2
@@ -83,6 +82,5 @@ class BookLog(models.Model):
 
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     log_type = models.PositiveSmallIntegerField(choices=LogType.choices)
-    student = models.ForeignKey(Student,null=True, on_delete=models.DO_NOTHING)
+    student = models.ForeignKey(Student, null=True, on_delete=models.DO_NOTHING)
     timestamp = models.DateTimeField(auto_now=True)
-

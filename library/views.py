@@ -53,6 +53,7 @@ class BookTakeView(View):
 
         return redirect("book_detail", book_id=book_id)
 
+
 class BookReturnView(View):
     def post(self, _, book_id: int):
         book: Book = Book.objects.get(id=book_id)
