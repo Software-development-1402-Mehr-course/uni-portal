@@ -1,41 +1,35 @@
 {% extends "base.html" %}
-{% block title %} {{ book.name }} {% endblock %}
+{% block title %}{{ book.name }}{% endblock %}
 {% block container %}
-<h1>{{ book.name }}</h1>
-<hr />
-<dl class="row">
-  <dt class="col-sm-2">Authors: </dt>
-  <dd class="col-sm-9">
-    {% for author in book.authors.all %}
-    <p>{{ author.name }}</p>
-    {% endfor %}
-  </dd>
-
-  <dt class="col-sm-2">Description: </dt>
-  <dd class="col-sm-9">{{ book.description }}</dd>
-
-  <dt class="col-sm-2">Subjects: </dt>
-  <dd class="col-sm-9">
-    {% for subject in book.subjects.all %}
-    <span class="badge bg-info">{{ subject.name }}</span>
-    {% endfor %}
-  </dd>
-
-  <dt class="col-sm-2">Availability: </dt>
-  <dd class="col-sm-9">{{ book.availability }}</dd>
-
-</dl>
-{% if user.student %}
-{% if book.reserved_by_id == request.user.id %}
-<form action="{% url 'book_reserve' book_id=book.id %}" method="post">
-  <button type="submit" class="btn btn-primary" disabled="true">
-    Reserved!
-  </button>
-</form>
-{% elif not book.reserved_by %}
-<form action="{% url 'book_reserve' book_id=book.id %}" method="post">
-  <button type="submit" class="btn btn-primary">Reserve</button>
-</form>
-{% endif %}
-{% endif %}
+    <h1>{{ book.name }}</h1>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Authors:</dt>
+        <dd class="col-sm-9">
+            {% for author in book.authors.all %}<p>{{ author.name }}</p>{% endfor %}
+        </dd>
+        <dt class="col-sm-2">Description:</dt>
+        <dd class="col-sm-9">
+            {{ book.description }}
+        </dd>
+        <dt class="col-sm-2">Subjects:</dt>
+        <dd class="col-sm-9">
+            {% for subject in book.subjects.all %}<span class="badge bg-info">{{ subject.name }}</span>{% endfor %}
+        </dd>
+        <dt class="col-sm-2">Availability:</dt>
+        <dd class="col-sm-9">
+            {{ book.availability }}
+        </dd>
+    </dl>
+    {% if user.student %}
+        {% if book.reserved_by_id == request.user.id %}
+            <form action="{% url 'book_reserve' book_id=book.id %}" method="post">
+                <button type="submit" class="btn btn-primary" disabled="true">Reserved!</button>
+            </form>
+        {% elif not book.reserved_by %}
+            <form action="{% url 'book_reserve' book_id=book.id %}" method="post">
+                <button type="submit" class="btn btn-primary">Reserve</button>
+            </form>
+        {% endif %}
+    {% endif %}
 {% endblock %}
