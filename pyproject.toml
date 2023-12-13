@@ -1,4 +1,4 @@
 [tool.pyright]
-exclude = ["**/apps.py"]
-typeChekingMode = "off"
+exclude = ["venv/**", "*/apps.py"]
+typeCheckingMode = "off"
 
