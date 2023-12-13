@@ -7,10 +7,10 @@
                hx-trigger="keyup changed delay:300ms"
                hx-target="#content"
                type="search"
-               name="q"
+               name="search_phrase"
                class="form-control"
                placeholder="Search books"
-               value="{{ search_term|default:'' }}" />
+               value="{{ query_params.search_phrase|default:'' }}" />
     </form>
     <ul class="list-group" id="content">
         {% block content %}
@@ -21,6 +21,11 @@
                     <small class="text-muted text-truncate">{{ book.authors_string }}</small>
                 </a>
             {% endfor %}
-        {% endblock %}
-    </ul>
-{% endblock %}
+            {% if rest_of_results_count %}
+                <li class=" list-group-item text-decoration-none list-group-item-action d-flex justify-content-center disabled">
+                    <span class="text-nowrap">{{ rest_of_results_count }} results out of this list<span>
+                    </li>
+                {% endif %}
+            {% endblock %}
+        </ul>
+    {% endblock %}

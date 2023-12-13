@@ -5,19 +5,23 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">Authors:</dt>
-        <dd class="col-sm-9">
+        <dd class="col-sm-10">
             {% for author in book.authors.all %}<p>{{ author.name }}</p>{% endfor %}
         </dd>
+        <dt class="col-sm-2">Publish year:</dt>
+        <dd class="col-sm-10">
+            {{ book.publish_date.year }}
+        </dd>
         <dt class="col-sm-2">Description:</dt>
-        <dd class="col-sm-9">
+        <dd class="col-sm-10">
             {{ book.description }}
         </dd>
         <dt class="col-sm-2">Subjects:</dt>
-        <dd class="col-sm-9">
-            {% for subject in book.subjects.all %}<span class="badge bg-info">{{ subject.name }}</span>{% endfor %}
+        <dd class="col-sm-10">
+            {% for subject in book.subjects.all %}<span class="badge bg-info m-1">{{ subject.name }}</span>{% endfor %}
         </dd>
         <dt class="col-sm-2">Availability:</dt>
-        <dd class="col-sm-9">
+        <dd class="col-sm-10">
             {{ book.availability }}
         </dd>
     </dl>

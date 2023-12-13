@@ -1,29 +1,58 @@
+from dataclasses import dataclass
+from functools import cache
+from typing import Optional
+
+from django.db.models import Q, QuerySet
 from django.shortcuts import redirect
 from django.views.generic import View
 from django.views.generic.base import TemplateView
 
-from common.views import HXViewMixin
+from common.htmx import HTMXHeaders
 
 from .models import Book
 
 
-class BookListView(TemplateView, HXViewMixin):
+class BookListView(TemplateView):
     template_name = "library/books.html"
+
+    page_size = 15
+
+    @dataclass
+    class QueryParams:
+        search_phrase: Optional[str] = None
+
+    @property
+    @cache
+    def query_params(self):
+        return self.QueryParams(**self.request.GET.dict())
+
+    def search_filter(self) -> Q:
+        filter = Q()
+        if not self.query_params.search_phrase:
+            return filter
+
+        for word in self.query_params.search_phrase.split():
+            filter &= Q(name__icontains=word) | Q(authors__name__icontains=word)
+
+        return filter
+
+    def get_books_query(self) -> QuerySet:
+        books_query = Book.objects.all()
+
+        books_query = books_query.filter(self.search_filter()).distinct()
+
+        return books_query
+
+    def rest_of_results_count(self) -> int:
+        return max(0, self.get_books_query().count() - self.page_size)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        books_query = Book.objects.all()
+        context["query_params"] = self.query_params
+        context["books"] = self.get_books_query()[: self.page_size]
+        context["rest_of_results_count"] = self.rest_of_results_count()
 
-        search_term = self.request.GET.get("q")
-        if search_term:
-            search_term: str
-            for word in search_term.split():
-                books_query = books_query.filter(name__icontains=word)
-
-        context["books"] = books_query[:15]
-        context["search_term"] = search_term
-
-        if self.is_hx_request(self.request):
+        if HTMXHeaders.from_request(self.request) is not None:
             context["base"] = "content.html"
 
         return context
