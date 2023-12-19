@@ -9,12 +9,12 @@ from django.views.generic.base import TemplateView
 
 from common.htmx import HTMXHeaders
 
+from .forms import BookSearchForm
 from .models import Book
 
 
 class BookListView(TemplateView):
     template_name = "library/books.html"
-
     page_size = 15
 
     @dataclass
@@ -23,16 +23,20 @@ class BookListView(TemplateView):
 
     @property
     @cache
-    def query_params(self):
-        return self.QueryParams(**self.request.GET.dict())
+    def search_form(self):
+        form = BookSearchForm(self.request.GET)
+        form.is_valid()
+
+        return form
 
     def search_filter(self) -> Q:
+        data = self.search_form.cleaned_data
         filter = Q()
-        if not self.query_params.search_phrase:
-            return filter
 
-        for word in self.query_params.search_phrase.split():
-            filter &= Q(name__icontains=word) | Q(authors__name__icontains=word)
+        search_phrase = data["search_phrase"]
+        if search_phrase:
+            for word in search_phrase.split():
+                filter &= Q(name__icontains=word) | Q(authors__name__icontains=word)
 
         return filter
 
@@ -48,7 +52,7 @@ class BookListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["query_params"] = self.query_params
+        context["search_form"] = self.search_form
         context["books"] = self.get_books_query()[: self.page_size]
         context["rest_of_results_count"] = self.rest_of_results_count()
 
