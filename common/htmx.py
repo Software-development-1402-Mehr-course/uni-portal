@@ -11,7 +11,7 @@ class HTMXHeaders:
     history_restore_request: bool
     prompt: Optional[str]
     target: str
-    trigger_name: str
+    trigger_name: Optional[str]
     trigger: Optional[str]
 
     @classmethod
@@ -26,6 +26,6 @@ class HTMXHeaders:
             headers.get("HX-History-Restore-Request") == "true",
             headers.get("HX-Prompt"),
             headers["HX-Target"],
-            headers["HX-Trigger-Name"],
+            headers.get("HX-Trigger-Name"),
             headers.get("HX-Trigger"),
         )

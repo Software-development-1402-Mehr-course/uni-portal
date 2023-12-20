@@ -3,14 +3,28 @@ from django.db import models
 from user.models import Student
 
 
+class SubjectManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().order_by("name")
+
+
 class Subject(models.Model):
+    objects = SubjectManager()
+
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.name
 
 
+class AuthorManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().order_by("name")
+
+
 class Author(models.Model):
+    objects = AuthorManager()
+
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):

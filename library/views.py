@@ -33,10 +33,24 @@ class BookListView(TemplateView):
         data = self.search_form.cleaned_data
         filter = Q()
 
-        search_phrase = data["search_phrase"]
-        if search_phrase:
+        if search_phrase := data.get("search_phrase"):
             for word in search_phrase.split():
                 filter &= Q(name__icontains=word) | Q(authors__name__icontains=word)
+
+        if name := data.get("name"):
+            filter &= Q(name__icontains=name)
+
+        if authors := data.get("authors"):
+            filter &= Q(authors__in=authors)
+
+        if publish_year_from := data.get("publish_year_from"):
+            filter &= Q(publish_date__year__gte=publish_year_from)
+
+        if publish_year_to := data.get("publish_year_to"):
+            filter &= Q(publish_date__year__lte=publish_year_to)
+
+        if subjects := data.get("subjects"):
+            filter &= Q(subjects__in=subjects)
 
         return filter
 
