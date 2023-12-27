@@ -17,3 +17,7 @@ class LoginView(TemplateView):
 
         messages.error(request, "Wrong username or password")
         return self.get(self, request)
+
+def logout_view(request):
+    logout(request)
+    return redirect("check_user")
