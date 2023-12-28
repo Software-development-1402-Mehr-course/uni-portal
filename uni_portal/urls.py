@@ -18,7 +18,14 @@ from django.contrib import admin
 from django.shortcuts import HttpResponse
 from django.urls import path
 
-from library.views import BookDetailView, BookListView, BookReserveView
+from library.views import (
+    BookDetailView,
+    BookListView,
+    BookReserveView,
+    BookTakeView,
+    BookExtendView,
+    BookReturnView,
+)
 from user.views import LoginView, logout_view
 
 urlpatterns = [
@@ -31,4 +38,7 @@ urlpatterns = [
     path(
         "library/reserve/<int:book_id>/", BookReserveView.as_view(), name="book_reserve"
     ),
+    path("library/take/<int:book_id>/", BookTakeView.as_view(), name="book_take"),
+    path("library/extend/<int:book_id>/", BookExtendView.as_view(), name="book_extend"),
+    path("library/return/<int:book_id>/", BookReturnView.as_view(), name="book_return"),
 ]

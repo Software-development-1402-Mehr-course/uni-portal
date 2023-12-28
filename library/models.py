@@ -1,6 +1,7 @@
 from django.db import models
 
 from user.models import Student
+from datetime import timedelta, datetime
 
 
 class SubjectManager(models.Manager):
@@ -47,6 +48,7 @@ class Book(models.Model):
     taken_by = models.ForeignKey(
         Student, null=True, on_delete=models.PROTECT, related_name="taken_book"
     )
+    return_due = models.DateField(null=True, blank=True)
 
     def reserve(self, student_id: int):
         self.reserved_by_id = student_id
@@ -60,10 +62,18 @@ class Book(models.Model):
         if remove_reservation:
             self.reserved_by_id = None
         self.taken_by_id = student_id
+        self.return_due = datetime.now() + timedelta(days=14)
         self.save()
 
         self.booklog_set.create(
             book=self, log_type=BookLog.LogType.TAKEN, student_id=student_id
+        )
+
+    def extend(self, student_id: int):
+        self.return_due = datetime.now() + timedelta(days=28)
+        self.save()
+        self.booklog_set.create(
+            book=self, log_type=BookLog.LogType.EXTENDED, student_id=student_id
         )
 
     def return_back(self):
@@ -93,6 +103,7 @@ class BookLog(models.Model):
         RETURNED = 1
         TAKEN = 2
         RESERVED = 3
+        EXTENDED = 4
 
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     log_type = models.PositiveSmallIntegerField(choices=LogType.choices)
