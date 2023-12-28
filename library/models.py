@@ -43,11 +43,20 @@ class Book(models.Model):
     subjects = models.ManyToManyField(Subject)
 
     reserved_by = models.ForeignKey(
-        Student, null=True, on_delete=models.SET_NULL, related_name="reserved_book"
+        Student,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="reserved_book",
     )
     taken_by = models.ForeignKey(
-        Student, null=True, on_delete=models.PROTECT, related_name="taken_book"
+        Student,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="taken_book",
     )
+
     return_due = models.DateField(null=True, blank=True)
 
     def reserve(self, student_id: int):
@@ -90,6 +99,13 @@ class Book(models.Model):
             return "Taken"
 
         return "Available"
+
+    @property
+    def current_fine(self):
+        now = datetime.now()
+        if now.date() > self.return_due:
+            return (now - self.return_due).days
+        return 0
 
     def authors_string(self) -> str:
         return " & ".join(author.name for author in self.authors.all())
