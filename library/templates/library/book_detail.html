@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block title %}{{ book.name }}{% endblock %}
 {% block container %}
     <h1>{{ book.name }}</h1>
@@ -22,18 +22,45 @@
         </dd>
         <dt class="col-sm-2">Availability:</dt>
         <dd class="col-sm-10">
-            {{ book.availability }}
+            {% if book.taken_by %}
+                <div id="borrow_status">
+                    <div class="alert alert-primary" role="alert">
+                        {% if book.taken_by.id == request.user.id %}
+                            You can keep this book until {{ book.return_due }}.
+                            <button type="button"
+                                    class="btn btn-info"
+                                    hx-target="#borrow_status"
+                                    hx-post="{% url 'book_extend' book_id=book.id %}"
+                                    hx-trigger="click">Extend</button>
+                            <button type="button"
+                                    class="btn btn-info"
+                                    hx-target="#borrow_status"
+                                    hx-post="{% url 'book_return' book_id=book.id %}"
+                                    hx-trigger="click">Return</button>
+                            <br>
+                            Current Fine: {{ book.current_fine}}
+                        {% else %}
+                            This book will be available at {{ book.return_due }}.
+                            <button type="button"
+                                    class="btn btn-link"
+                                    hx-target="#borrow_status"
+                                    hx-post="{% url 'book_reserve' book_id=book.id %}"
+                                    hx-trigger="click">Reserve!</button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <div id="borrow_status">
+                    <div class="alert alert-primary" role="alert">
+                        This book is available.
+                        <button type="button"
+                                class="btn btn-link"
+                                hx-target="#borrow_status"
+                                hx-post="{% url 'book_take' book_id=book.id %}"
+                                hx-trigger="click">Borrow Now!</button>
+                    </div>
+                </div>
+            {% endif %}
         </dd>
     </dl>
-    {% if user.student %}
-        {% if book.reserved_by_id == request.user.id %}
-            <form action="{% url 'book_reserve' book_id=book.id %}" method="post">
-                <button type="submit" class="btn btn-primary" disabled="true">Reserved!</button>
-            </form>
-        {% elif not book.reserved_by %}
-            <form action="{% url 'book_reserve' book_id=book.id %}" method="post">
-                <button type="submit" class="btn btn-primary">Reserve</button>
-            </form>
-        {% endif %}
-    {% endif %}
 {% endblock %}

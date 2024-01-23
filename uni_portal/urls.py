@@ -18,16 +18,27 @@ from django.contrib import admin
 from django.shortcuts import HttpResponse
 from django.urls import path
 
-from library.views import BookDetailView, BookListView, BookReserveView
-from user.views import LoginView
+from library.views import (
+    BookDetailView,
+    BookListView,
+    BookReserveView,
+    BookTakeView,
+    BookExtendView,
+    BookReturnView,
+)
+from user.views import LoginView, logout_view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", LoginView.as_view(), name="login"),
+    path("logout/", logout_view),
     path("check_user/", lambda request: HttpResponse(request.user), name="check_user"),
     path("library/", BookListView.as_view(), name="book_list"),
     path("library/<int:book_id>", BookDetailView.as_view(), name="book_detail"),
     path(
         "library/reserve/<int:book_id>/", BookReserveView.as_view(), name="book_reserve"
     ),
+    path("library/take/<int:book_id>/", BookTakeView.as_view(), name="book_take"),
+    path("library/extend/<int:book_id>/", BookExtendView.as_view(), name="book_extend"),
+    path("library/return/<int:book_id>/", BookReturnView.as_view(), name="book_return"),
 ]

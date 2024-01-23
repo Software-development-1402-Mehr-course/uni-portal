@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 from functools import cache
 from typing import Optional
+from datetime import timedelta, datetime
 
 from django.db.models import Q, QuerySet
 from django.shortcuts import redirect
 from django.views.generic import View
 from django.views.generic.base import TemplateView
+from django.http import HttpResponse
 
 from common.htmx import HTMXHeaders
 
@@ -87,23 +89,59 @@ class BookDetailView(TemplateView):
 
 class BookReserveView(View):
     def post(self, request, book_id: int):
+        if not request.user.is_authenticated:
+            return HttpResponse(
+                '<div class="alert alert-danger"> You are not logged in! </div>'
+            )
         book: Book = Book.objects.get(id=book_id)
-        book.reserve(request.user.id)
+        if book.reserved_by.id == request.user.id:
+            return HttpResponse(
+                '<div class="alert alert-danger"> You have already reserved this book! </div>'
+            )
 
-        return redirect("book_detail", book_id=book_id)
+        book.reserve(request.user.id)
+        return HttpResponse(
+            '<div class="alert alert-success"> Book reserved successfully! </div>'
+        )
 
 
 class BookTakeView(View):
-    def post(self, _, student_id: int, book_id: int):
+    def post(self, request, book_id: int):
         book: Book = Book.objects.get(id=book_id)
-        book.take(student_id)
+        if not request.user.is_authenticated:
+            return HttpResponse(
+                '<div class="alert alert-danger"> You are not logged in! </div>'
+            )
+        user_id = request.user.id
+        book.take(user_id)
+        return HttpResponse(
+            '<div class="alert alert-success"> Book borrowed successfully! </div>'
+        )
 
-        return redirect("book_detail", book_id=book_id)
+
+class BookExtendView(View):
+    def post(self, request, book_id: int):
+        book: Book = Book.objects.get(id=book_id)
+        if not request.user.is_authenticated:
+            return HttpResponse(
+                '<div class="alert alert-danger"> You are not logged in! </div>'
+            )
+        if request.user.id == book.taken_by.id:
+            user_id = request.user.id
+            book.extend(user_id)
+            return HttpResponse(
+                '<div class="alert alert-success"> Book return time extended successfully! </div>'
+            )
+        else:
+            return redirect("book_detail", book_id=book_id)
 
 
 class BookReturnView(View):
-    def post(self, _, book_id: int):
+    def post(self, request, book_id: int):
         book: Book = Book.objects.get(id=book_id)
-        book.return_back()
+        if request.user.id == book.taken_by.id:
+            book.return_back()
+            return HttpResponse('<div class="alert alert-success"> Thank you! </div>')
+        else:
+            return redirect("book_detail", book_id=book_id)
 
-        return redirect("book_detail", book_id=book_id)

@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
@@ -17,3 +17,7 @@ class LoginView(TemplateView):
 
         messages.error(request, "Wrong username or password")
         return self.get(self, request)
+
+def logout_view(request):
+    logout(request)
+    return redirect("check_user")
