@@ -38,7 +38,7 @@
                                     hx-post="{% url 'book_return' book_id=book.id %}"
                                     hx-trigger="click">Return</button>
                             <br>
-                            Current Fine: {{ book.current_fine}}
+                            Current Fine: {{ book.current_fine }}
                         {% else %}
                             This book will be available at {{ book.return_due }}.
                             <button type="button"
