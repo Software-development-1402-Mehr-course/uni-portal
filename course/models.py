@@ -5,7 +5,8 @@ from user.models import Professor, Student
 
 class CourseSubject(models.Model):
     prerequisites = models.ManyToManyField("self")
-    subject = models.TextField(unique=True)
+    name = models.TextField(unique=True)
+    credit = models.PositiveSmallIntegerField()
 
 
 class Course(models.Model):

@@ -18,14 +18,8 @@ from django.contrib import admin
 from django.shortcuts import HttpResponse
 from django.urls import path
 
-from library.views import (
-    BookDetailView,
-    BookExtendView,
-    BookListView,
-    BookReserveView,
-    BookReturnView,
-    BookTakeView,
-)
+from library.views import (BookDetailView, BookExtendView, BookListView,
+                           BookReserveView, BookReturnView, BookTakeView)
 from user.views import LoginView, logout_view
 
 urlpatterns = [

@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class UserLevelError:
+class ListLevelError:
     message: str
 
 
@@ -12,4 +12,4 @@ class ItemLevelError:
     message: str
 
 
-ValidationError = UserLevelError | ItemLevelError
+ValidationError = ListLevelError | ItemLevelError

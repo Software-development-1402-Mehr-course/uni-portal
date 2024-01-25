@@ -1,20 +1,14 @@
 from abc import ABC, abstractmethod
 from itertools import product
-from typing import Optional
-
-from _typeshed import Self
+from typing import Optional, Self
 
 from course.models import Course
 from user.models import Student
 
-from .error import ItemLevelError, UserLevelError, ValidationError
+from .error import ItemLevelError, ListLevelError, ValidationError
 
 
 class AbstractValidator(ABC):
-    @abstractmethod
-    def set_student(self, student: Student) -> None:
-        ...
-
     @abstractmethod
     def add_course(self, course: Course) -> None:
         ...
@@ -31,21 +25,19 @@ class AbstractValidator(ABC):
     def errors(self) -> list[ValidationError]:
         ...
 
-    def __or__(self, other: Self):
+
+class BaseValidator(AbstractValidator):
+    def __or__(self, other: AbstractValidator) -> AbstractValidator:
         return OrValidator(self, other)
 
-    def __add__(self, other: Self):
+    def __and__(self, other: Self) -> AbstractValidator:
         return AndValidator(self, other)
 
 
-class AndValidator(AbstractValidator):
-    def __init__(self, *validators: AbstractValidator) -> None:
+class AndValidator(BaseValidator):
+    def __init__(self, *validators: BaseValidator) -> None:
         super().__init__()
         self.validators = validators
-
-    def set_student(self, student: Student) -> None:
-        for validator in self.validators:
-            validator.set_student(student)
 
     def add_course(self, course: Course) -> None:
         for validator in self.validators:
@@ -62,10 +54,10 @@ class AndValidator(AbstractValidator):
         return sum((validator.errors() for validator in self.validators), [])
 
 
-class OrValidator(AbstractValidator):
+class OrValidator(BaseValidator):
     seprator = " & "
 
-    def __init__(self, *validators: AbstractValidator) -> None:
+    def __init__(self, *validators: BaseValidator) -> None:
         super().__init__()
         self.validators = validators
 
@@ -99,6 +91,6 @@ class OrValidator(AbstractValidator):
         error_message = self.seprator.join(error.message for error in chain)
         match list(error_item_ids):
             case []:
-                return UserLevelError(message=error_message)
+                return ListLevelError(message=error_message)
             case [item_id]:
                 return ItemLevelError(item_id=item_id, message=error_message)
