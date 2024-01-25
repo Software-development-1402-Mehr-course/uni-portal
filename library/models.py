@@ -1,7 +1,8 @@
+from datetime import datetime, timedelta
+
 from django.db import models
 
 from user.models import Student
-from datetime import timedelta, datetime
 
 
 class SubjectManager(models.Manager):

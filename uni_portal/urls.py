@@ -20,11 +20,11 @@ from django.urls import path
 
 from library.views import (
     BookDetailView,
+    BookExtendView,
     BookListView,
     BookReserveView,
-    BookTakeView,
-    BookExtendView,
     BookReturnView,
+    BookTakeView,
 )
 from user.views import LoginView, logout_view
 

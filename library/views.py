@@ -1,13 +1,13 @@
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from functools import cache
 from typing import Optional
-from datetime import timedelta, datetime
 
 from django.db.models import Q, QuerySet
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import View
 from django.views.generic.base import TemplateView
-from django.http import HttpResponse
 
 from common.htmx import HTMXHeaders
 
@@ -144,4 +144,3 @@ class BookReturnView(View):
             return HttpResponse('<div class="alert alert-success"> Thank you! </div>')
         else:
             return redirect("book_detail", book_id=book_id)
-

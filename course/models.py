@@ -11,6 +11,7 @@ class CourseSubject(models.Model):
 class Course(models.Model):
     teacher = models.ForeignKey(Professor, on_delete=models.CASCADE)
     subject = models.ForeignKey(CourseSubject, on_delete=models.PROTECT)
+    enrolment_cap = models.PositiveSmallIntegerField()
 
 
 class CourseSession(models.Model):
