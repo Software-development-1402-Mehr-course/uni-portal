@@ -97,7 +97,7 @@ class BookReserveView(View):
                 '<div class="alert alert-danger"> You are not logged in! </div>'
             )
         book: Book = Book.objects.get(id=book_id)
-        if book.reserved_by.id == request.user.id:
+        if book.reserved_by and book.reserved_by.id == request.user.id:
             return HttpResponse(
                 '<div class="alert alert-danger"> You have already reserved this book! </div>'
             )
