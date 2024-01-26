@@ -1,0 +1,67 @@
+@startuml classes
+set namespaceSeparator none
+class "abc.ABC" as abc.ABC #grey {
+}
+class "validators.ValidatorFacade" as validators.ValidatorFacade #77AADD {
+  student
+  validator
+  propose_student_curriculum() -> list[Enrolment]
+  reset_validator()
+  student_valid_courses()
+}
+class "validators.base_validator.AbstractValidator" as validators.base_validator.AbstractValidator #77AADD {
+  {abstract}add_course(course: Course) -> None
+  {abstract}errors() -> list[ValidationError]
+  {abstract}is_valid() -> bool
+  {abstract}remove_course(course: Course) -> None
+}
+class "validators.base_validator.AndValidator" as validators.base_validator.AndValidator #77AADD {
+  validators : tuple
+  add_course(course: Course) -> None
+  errors()
+  is_valid() -> bool
+  remove_course(course: Course) -> None
+}
+class "validators.base_validator.BaseValidator" as validators.base_validator.BaseValidator #77AADD {
+}
+class "validators.base_validator.OrValidator" as validators.base_validator.OrValidator #77AADD {
+  seprator : str
+  validators : tuple
+  add_course(course: Course) -> None
+  errors()
+  is_valid() -> bool
+  reduce_error_chain(chain: tuple[ValidationError]) -> Optional[ValidationError]
+  remove_course(course: Course) -> None
+  set_student(student: Student) -> None
+}
+class "validators.credit_range_validator.MaxCreditValidator" as validators.credit_range_validator.MaxCreditValidator #77AADD {
+  credit_sum : int
+  max_credit_sum : int
+  add_course(course: Course) -> None
+  errors()
+  is_valid() -> bool
+  remove_course(course: Course) -> None
+}
+class "validators.error.ItemLevelError" as validators.error.ItemLevelError #77AADD {
+  item_id : int
+  message : str
+}
+class "validators.error.ListLevelError" as validators.error.ListLevelError #77AADD {
+  message : str
+}
+class "validators.prerequisites_validator.PrerequisitesValidator" as validators.prerequisites_validator.PrerequisitesValidator #77AADD {
+  invalid_item_ids : set[int]
+  student
+  add_course(course: Course) -> None
+  errors()
+  is_valid() -> bool
+  remove_course(course: Course) -> None
+}
+validators.base_validator.AbstractValidator --|> abc.ABC
+validators.base_validator.AndValidator --|> validators.base_validator.BaseValidator
+validators.base_validator.BaseValidator --|> validators.base_validator.AbstractValidator
+validators.base_validator.OrValidator --|> validators.base_validator.BaseValidator
+validators.credit_range_validator.MaxCreditValidator --|> validators.base_validator.BaseValidator
+validators.prerequisites_validator.PrerequisitesValidator --|> validators.base_validator.BaseValidator
+validators.base_validator.AndValidator --* validators.ValidatorFacade : validator
+@enduml

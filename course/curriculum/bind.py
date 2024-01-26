@@ -1,8 +1,9 @@
-from django.db.models import F, Q, Count
-from user.models import Student
-from course.models import Course, Enrolment
-from course.curriculum.validators import ValidatorFacade
+from django.db.models import Count, F, Q
 from django.db.transaction import atomic
+
+from course.curriculum.validators import ValidatorFacade
+from course.models import Course, Enrolment
+from user.models import Student
 
 
 class BindCourses:

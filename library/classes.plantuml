@@ -1,0 +1,313 @@
+@startuml classes
+set namespaceSeparator none
+class "django.apps.config.AppConfig" as django.apps.config.AppConfig #44BB99 {
+  apps : NoneType
+  label
+  models : NoneType
+  models_module : NoneType
+  module
+  name
+  path
+  verbose_name
+  create(entry)
+  default_auto_field()
+  get_model(model_name, require_ready)
+  get_models(include_auto_created, include_swapped)
+  import_models()
+  {abstract}ready()
+}
+class "django.contrib.admin.options.ModelAdmin" as django.contrib.admin.options.ModelAdmin #BBCC33 {
+  action_form : ActionForm
+  actions : tuple
+  actions_on_bottom : bool
+  actions_on_top : bool
+  actions_selection_counter : bool
+  add_form_template : NoneType
+  admin_site
+  change_form_template : NoneType
+  change_list_template : NoneType
+  checks_class : ModelAdminChecks
+  date_hierarchy : NoneType
+  delete_confirmation_template : NoneType
+  delete_selected_confirmation_template : NoneType
+  inlines : tuple
+  list_display : tuple
+  list_display_links : tuple
+  list_editable : tuple
+  list_filter : tuple
+  list_max_show_all : int
+  list_per_page : int
+  list_select_related : bool
+  media
+  model
+  object_history_template : NoneType
+  opts
+  paginator : Paginator
+  popup_response_template : NoneType
+  preserve_filters : bool
+  save_as : bool
+  save_as_continue : bool
+  save_on_top : bool
+  search_fields : tuple
+  search_help_text : NoneType
+  show_facets : ALLOW
+  urls
+  action_checkbox(obj)
+  add_view(request, form_url, extra_context)
+  change_view(request, object_id, form_url, extra_context)
+  changeform_view(request, object_id, form_url, extra_context)
+  changelist_view(request, extra_context)
+  construct_change_message(request, form, formsets, add)
+  delete_model(request, obj)
+  delete_queryset(request, queryset)
+  delete_view(request, object_id, extra_context)
+  get_action(action)
+  get_action_choices(request, default_choices)
+  get_actions(request)
+  get_changeform_initial_data(request)
+  get_changelist(request)
+  get_changelist_form(request)
+  get_changelist_formset(request)
+  get_changelist_instance(request)
+  get_deleted_objects(objs, request)
+  get_form(request, obj, change)
+  get_formset_kwargs(request, obj, inline, prefix)
+  get_formsets_with_inlines(request, obj)
+  get_inline_formsets(request, formsets, inline_instances, obj)
+  get_inline_instances(request, obj)
+  get_list_display(request)
+  get_list_display_links(request, list_display)
+  get_list_filter(request)
+  get_list_select_related(request)
+  get_model_perms(request)
+  get_object(request, object_id, from_field)
+  get_paginator(request, queryset, per_page, orphans, allow_empty_first_page)
+  get_preserved_filters(request)
+  get_search_fields(request)
+  get_search_results(request, queryset, search_term)
+  get_urls()
+  history_view(request, object_id, extra_context)
+  log_addition(request, obj, message)
+  log_change(request, obj, message)
+  log_deletion(request, obj, object_repr)
+  message_user(request, message, level, extra_tags, fail_silently)
+  render_change_form(request, context, add, change, form_url, obj)
+  render_delete_form(request, context)
+  response_action(request, queryset)
+  response_add(request, obj, post_url_continue)
+  response_change(request, obj)
+  response_delete(request, obj_display, obj_id)
+  response_post_save_add(request, obj)
+  response_post_save_change(request, obj)
+  save_form(request, form, change)
+  save_formset(request, form, formset, change)
+  save_model(request, obj, form, change)
+  save_related(request, form, formsets, change)
+}
+class "django.db.migrations.migration.Migration" as django.db.migrations.migration.Migration #AAAA00 {
+  app_label
+  atomic : bool
+  dependencies : list
+  initial : NoneType
+  name
+  operations : list
+  replaces : list
+  run_before : list
+  apply(project_state, schema_editor, collect_sql)
+  mutate_state(project_state, preserve)
+  suggest_name()
+  unapply(project_state, schema_editor, collect_sql)
+}
+class "django.db.models.base.Model" as django.db.models.base.Model #AAAA00 {
+  pk
+  adelete(using, keep_parents)
+  arefresh_from_db(using, fields)
+  asave(force_insert, force_update, using, update_fields)
+  check()
+  {abstract}clean()
+  clean_fields(exclude)
+  date_error_message(lookup_type, field_name, unique_for)
+  delete(using, keep_parents)
+  from_db(db, field_names, values)
+  full_clean(exclude, validate_unique, validate_constraints)
+  get_constraints()
+  get_deferred_fields()
+  prepare_database_save(field)
+  refresh_from_db(using, fields)
+  save(force_insert, force_update, using, update_fields)
+  save_base(raw, force_insert, force_update, using, update_fields)
+  serializable_value(field_name)
+  unique_error_message(model_class, unique_check)
+  validate_constraints(exclude)
+  validate_unique(exclude)
+}
+class "django.db.models.enums.IntegerChoices" as django.db.models.enums.IntegerChoices #AAAA00 {
+  name
+}
+class "django.db.models.manager.Manager" as django.db.models.manager.Manager #AAAA00 {
+  auto_created : bool
+}
+class "django.forms.forms.Form" as django.forms.forms.Form #EEDD88 {
+}
+class "django.views.generic.base.TemplateView" as django.views.generic.base.TemplateView #EE8866 {
+  get(request)
+}
+class "django.views.generic.base.View" as django.views.generic.base.View #EE8866 {
+  args : tuple
+  head
+  http_method_names : list
+  kwargs : dict
+  request
+  as_view()
+  dispatch(request)
+  http_method_not_allowed(request)
+  options(request)
+  setup(request)
+  view_is_async()
+}
+class "library.admin.BookLogAdmin" as library.admin.BookLogAdmin #77AADD {
+  date_hierarchy : str
+  list_display : tuple
+}
+class "library.apps.LibraryConfig" as library.apps.LibraryConfig #77AADD {
+  default_auto_field : str
+  name : str
+}
+class "library.forms.BookSearchForm" as library.forms.BookSearchForm #77AADD {
+  authors : ModelMultipleChoiceField
+  name : CharField
+  publish_year_from : IntegerField
+  publish_year_to : IntegerField
+  search_phrase : CharField
+  subjects : ModelMultipleChoiceField
+}
+class "library.migrations.0001_initial.Migration" as library.migrations.0001_initial.Migration #99DDFF {
+  dependencies : list
+  initial : bool
+  operations : list
+}
+class "library.migrations.0002_book_description_alter_book_reserved_by_and_more.Migration" as library.migrations.0002_book_description_alter_book_reserved_by_and_more.Migration #99DDFF {
+  dependencies : list
+  operations : list
+}
+class "library.migrations.0003_booklog.Migration" as library.migrations.0003_booklog.Migration #99DDFF {
+  dependencies : list
+  operations : list
+}
+class "library.migrations.0004_book_publish_date_alter_booklog_student.Migration" as library.migrations.0004_book_publish_date_alter_booklog_student.Migration #99DDFF {
+  dependencies : list
+  operations : list
+}
+class "library.migrations.0005_author_subject_remove_book_author_book_authors_and_more.Migration" as library.migrations.0005_author_subject_remove_book_author_book_authors_and_more.Migration #99DDFF {
+  dependencies : list
+  operations : list
+}
+class "library.migrations.0006_book_return_due_alter_book_reserved_by_and_more.Migration" as library.migrations.0006_book_return_due_alter_book_reserved_by_and_more.Migration #99DDFF {
+  dependencies : list
+  operations : list
+}
+class "library.migrations.0007_alter_booklog_log_type.Migration" as library.migrations.0007_alter_booklog_log_type.Migration #99DDFF {
+  dependencies : list
+  operations : list
+}
+class "library.models.Author" as library.models.Author #77AADD {
+  name : CharField
+  objects
+}
+class "library.models.AuthorManager" as library.models.AuthorManager #77AADD {
+  get_queryset()
+}
+class "library.models.Book" as library.models.Book #77AADD {
+  authors : ManyToManyField
+  booklog_set
+  current_fine
+  description : TextField
+  name : CharField
+  objects
+  publish_date : DateField
+  reserved_by : ForeignKey
+  reserved_by_id : NoneType, int
+  return_due : DateField
+  subjects : ManyToManyField
+  taken_by : ForeignKey
+  taken_by_id : NoneType, int
+  authors_string() -> str
+  availability() -> str
+  extend(student_id: int)
+  reserve(student_id: int)
+  return_back()
+  take(student_id: int, remove_reservation: bool)
+}
+class "library.models.BookLog" as library.models.BookLog #77AADD {
+  book : ForeignKey
+  log_type : PositiveSmallIntegerField
+  student : ForeignKey
+  timestamp : DateTimeField
+}
+class "library.models.LogType" as library.models.BookLog.LogType #FFAABB {
+  name
+}
+class "library.models.Subject" as library.models.Subject #77AADD {
+  name : CharField
+  objects
+}
+class "library.models.SubjectManager" as library.models.SubjectManager #77AADD {
+  get_queryset()
+}
+class "library.views.BookDetailView" as library.views.BookDetailView #77AADD {
+  template_name : str
+  get_context_data()
+}
+class "library.views.BookExtendView" as library.views.BookExtendView #77AADD {
+  post(request, book_id: int)
+}
+class "library.views.BookListView" as library.views.BookListView #77AADD {
+  page_size : int
+  search_form
+  template_name : str
+  get_books_query() -> QuerySet
+  get_context_data()
+  rest_of_results_count() -> int
+  search_filter() -> Q
+}
+class "library.views.BookReserveView" as library.views.BookReserveView #77AADD {
+  post(request, book_id: int)
+}
+class "library.views.BookReturnView" as library.views.BookReturnView #77AADD {
+  post(request, book_id: int)
+}
+class "library.views.BookTakeView" as library.views.BookTakeView #77AADD {
+  post(request, book_id: int)
+}
+class "library.views.QueryParams" as library.views.BookListView.QueryParams #DDDDDD {
+  search_phrase : Optional[str]
+}
+django.views.generic.base.TemplateView --|> django.views.generic.base.View
+library.admin.BookLogAdmin --|> django.contrib.admin.options.ModelAdmin
+library.apps.LibraryConfig --|> django.apps.config.AppConfig
+library.forms.BookSearchForm --|> django.forms.forms.Form
+library.migrations.0001_initial.Migration --|> django.db.migrations.migration.Migration
+library.migrations.0002_book_description_alter_book_reserved_by_and_more.Migration --|> django.db.migrations.migration.Migration
+library.migrations.0003_booklog.Migration --|> django.db.migrations.migration.Migration
+library.migrations.0004_book_publish_date_alter_booklog_student.Migration --|> django.db.migrations.migration.Migration
+library.migrations.0005_author_subject_remove_book_author_book_authors_and_more.Migration --|> django.db.migrations.migration.Migration
+library.migrations.0006_book_return_due_alter_book_reserved_by_and_more.Migration --|> django.db.migrations.migration.Migration
+library.migrations.0007_alter_booklog_log_type.Migration --|> django.db.migrations.migration.Migration
+library.models.Author --|> django.db.models.base.Model
+library.models.AuthorManager --|> django.db.models.manager.Manager
+library.models.Book --|> django.db.models.base.Model
+library.models.BookLog --|> django.db.models.base.Model
+library.models.BookLog.LogType --|> django.db.models.enums.IntegerChoices
+library.models.Subject --|> django.db.models.base.Model
+library.models.SubjectManager --|> django.db.models.manager.Manager
+library.views.BookDetailView --|> django.views.generic.base.TemplateView
+library.views.BookExtendView --|> django.views.generic.base.View
+library.views.BookListView --|> django.views.generic.base.TemplateView
+library.views.BookReserveView --|> django.views.generic.base.View
+library.views.BookReturnView --|> django.views.generic.base.View
+library.views.BookTakeView --|> django.views.generic.base.View
+django.db.models.manager.Manager --* library.models.Book : objects
+django.db.models.manager.Manager --* library.models.Book : booklog_set
+library.models.AuthorManager --* library.models.Author : objects
+library.models.SubjectManager --* library.models.Subject : objects
+@enduml

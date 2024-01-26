@@ -1,0 +1,153 @@
+@startuml classes
+set namespaceSeparator none
+class "apps.CourseConfig" as apps.CourseConfig #44BB99 {
+  default_auto_field : str
+  name : str
+}
+class "django.apps.config.AppConfig" as django.apps.config.AppConfig #FFAABB {
+  apps : NoneType
+  label
+  models : NoneType
+  models_module : NoneType
+  module
+  name
+  path
+  verbose_name
+  create(entry)
+  default_auto_field()
+  get_model(model_name, require_ready)
+  get_models(include_auto_created, include_swapped)
+  import_models()
+  {abstract}ready()
+}
+class "django.db.migrations.migration.Migration" as django.db.migrations.migration.Migration #DDDDDD {
+  app_label
+  atomic : bool
+  dependencies : list
+  initial : NoneType
+  name
+  operations : list
+  replaces : list
+  run_before : list
+  apply(project_state, schema_editor, collect_sql)
+  mutate_state(project_state, preserve)
+  suggest_name()
+  unapply(project_state, schema_editor, collect_sql)
+}
+class "django.db.models.base.Model" as django.db.models.base.Model #DDDDDD {
+  pk
+  adelete(using, keep_parents)
+  arefresh_from_db(using, fields)
+  asave(force_insert, force_update, using, update_fields)
+  check()
+  {abstract}clean()
+  clean_fields(exclude)
+  date_error_message(lookup_type, field_name, unique_for)
+  delete(using, keep_parents)
+  from_db(db, field_names, values)
+  full_clean(exclude, validate_unique, validate_constraints)
+  get_constraints()
+  get_deferred_fields()
+  prepare_database_save(field)
+  refresh_from_db(using, fields)
+  save(force_insert, force_update, using, update_fields)
+  save_base(raw, force_insert, force_update, using, update_fields)
+  serializable_value(field_name)
+  unique_error_message(model_class, unique_check)
+  validate_constraints(exclude)
+  validate_unique(exclude)
+}
+class "django.db.models.enums.IntegerChoices" as django.db.models.enums.IntegerChoices #DDDDDD {
+  name
+}
+class "django.views.generic.base.TemplateView" as django.views.generic.base.TemplateView #77AADD {
+  get(request)
+}
+class "migrations.0001_initial.Migration" as migrations.0001_initial.Migration #BBCC33 {
+  dependencies : list
+  initial : bool
+  operations : list
+}
+class "migrations.0002_coursesubject_alter_course_subject_enrolment_pick_and_more.Migration" as migrations.0002_coursesubject_alter_course_subject_enrolment_pick_and_more.Migration #BBCC33 {
+  dependencies : list
+  operations : list
+}
+class "migrations.0003_coursesession.Migration" as migrations.0003_coursesession.Migration #BBCC33 {
+  dependencies : list
+  operations : list
+}
+class "migrations.0004_course_enrolment_cap.Migration" as migrations.0004_course_enrolment_cap.Migration #BBCC33 {
+  dependencies : list
+  operations : list
+}
+class "migrations.0005_rename_subject_coursesubject_name.Migration" as migrations.0005_rename_subject_coursesubject_name.Migration #BBCC33 {
+  dependencies : list
+  operations : list
+}
+class "migrations.0006_coursesubject_credit.Migration" as migrations.0006_coursesubject_credit.Migration #BBCC33 {
+  dependencies : list
+  operations : list
+}
+class "migrations.0007_enrolment_priority_enrolment_tokens_and_more.Migration" as migrations.0007_enrolment_priority_enrolment_tokens_and_more.Migration #BBCC33 {
+  dependencies : list
+  operations : list
+}
+class "models.Course" as models.Course #AAAA00 {
+  enrolment_cap : PositiveSmallIntegerField
+  subject : ForeignKey
+  teacher : ForeignKey
+  picked(student: Student)
+}
+class "models.CourseSession" as models.CourseSession #AAAA00 {
+  course : ForeignKey
+  holds_even_weeks : BooleanField
+  holds_odd_weeks : BooleanField
+  time_slot
+  weekday : IntegerField
+}
+class "models.CourseSubject" as models.CourseSubject #AAAA00 {
+  credit : PositiveSmallIntegerField
+  name : TextField
+  prerequisites : ManyToManyField
+}
+class "models.Enrolment" as models.Enrolment #AAAA00 {
+  course : ForeignKey
+  priority : PositiveSmallIntegerField
+  status : IntegerField
+  student : ForeignKey
+  tokens : PositiveSmallIntegerField
+}
+class "models.Meta" as models.Enrolment.Meta #AAAA00 {
+  unique_together : list
+}
+class "models.Status" as models.Enrolment.Status #AAAA00 {
+  name
+}
+class "models.Weekday" as models.CourseSession.Weekday #AAAA00 {
+  name
+}
+class "views.PickView" as views.PickView #EE8866 {
+  template_name : str
+  get_context_data()
+  picked_enrolments(student: Student)
+  post(request)
+  tokens(student: Student)
+  valid_courses(validator: ValidatorFacade)
+}
+apps.CourseConfig --|> django.apps.config.AppConfig
+migrations.0001_initial.Migration --|> django.db.migrations.migration.Migration
+migrations.0002_coursesubject_alter_course_subject_enrolment_pick_and_more.Migration --|> django.db.migrations.migration.Migration
+migrations.0003_coursesession.Migration --|> django.db.migrations.migration.Migration
+migrations.0004_course_enrolment_cap.Migration --|> django.db.migrations.migration.Migration
+migrations.0005_rename_subject_coursesubject_name.Migration --|> django.db.migrations.migration.Migration
+migrations.0006_coursesubject_credit.Migration --|> django.db.migrations.migration.Migration
+migrations.0007_enrolment_priority_enrolment_tokens_and_more.Migration --|> django.db.migrations.migration.Migration
+models.Course --|> django.db.models.base.Model
+models.CourseSession --|> django.db.models.base.Model
+models.CourseSession.Weekday --|> django.db.models.enums.IntegerChoices
+models.CourseSubject --|> django.db.models.base.Model
+models.Enrolment --|> django.db.models.base.Model
+models.Enrolment.Status --|> django.db.models.enums.IntegerChoices
+views.PickView --|> django.views.generic.base.TemplateView
+django.db.models.enums.IntegerChoices --* models.CourseSession : time_slot
+@enduml

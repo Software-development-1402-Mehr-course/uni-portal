@@ -1,0 +1,31 @@
+@startuml packages
+set namespaceSeparator none
+package "__init__" as __init__ #77AADD {
+}
+package "admin" as admin #99DDFF {
+}
+package "apps" as apps #44BB99 {
+}
+package "migrations" as migrations #BBCC33 {
+}
+package "migrations.0001_initial" as migrations.0001_initial #BBCC33 {
+}
+package "migrations.0002_coursesubject_alter_course_subject_enrolment_pick_and_more" as migrations.0002_coursesubject_alter_course_subject_enrolment_pick_and_more #BBCC33 {
+}
+package "migrations.0003_coursesession" as migrations.0003_coursesession #BBCC33 {
+}
+package "migrations.0004_course_enrolment_cap" as migrations.0004_course_enrolment_cap #BBCC33 {
+}
+package "migrations.0005_rename_subject_coursesubject_name" as migrations.0005_rename_subject_coursesubject_name #BBCC33 {
+}
+package "migrations.0006_coursesubject_credit" as migrations.0006_coursesubject_credit #BBCC33 {
+}
+package "migrations.0007_enrolment_priority_enrolment_tokens_and_more" as migrations.0007_enrolment_priority_enrolment_tokens_and_more #BBCC33 {
+}
+package "models" as models #AAAA00 {
+}
+package "tests" as tests #EEDD88 {
+}
+package "views" as views #EE8866 {
+}
+@enduml

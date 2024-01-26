@@ -1,0 +1,20 @@
+@startuml packages
+set namespaceSeparator none
+package "validators" as validators #77AADD {
+}
+package "validators.base_validator" as validators.base_validator #77AADD {
+}
+package "validators.credit_range_validator" as validators.credit_range_validator #77AADD {
+}
+package "validators.error" as validators.error #77AADD {
+}
+package "validators.prerequisites_validator" as validators.prerequisites_validator #77AADD {
+}
+validators --> validators.base_validator
+validators --> validators.credit_range_validator
+validators --> validators.prerequisites_validator
+validators.base_validator --> validators.error
+validators.credit_range_validator --> validators.base_validator
+validators.credit_range_validator --> validators.error
+validators.prerequisites_validator --> validators.base_validator
+@enduml
