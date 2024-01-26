@@ -103,8 +103,8 @@ class Book(models.Model):
 
     @property
     def current_fine(self):
-        now = datetime.now()
-        if now.date() > self.return_due:
+        now = datetime.now().date()
+        if now > self.return_due:
             return (now - self.return_due).days
         return 0
 
