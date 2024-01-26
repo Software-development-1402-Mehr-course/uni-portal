@@ -28,21 +28,21 @@ class ValidatorFacade:
 
         return valid_courses
 
-    def propose_student_curriculum(self):
-        for course in Course.objects.filter(
-            enrolment__status=Enrolment.Status.LOCKED,
-            enrolment__student=self.student,
+    def propose_student_curriculum(self) -> list[Enrolment]:
+        for enrolment in Enrolment.objects.filter(
+            status=Enrolment.Status.LOCKED,
+            student=self.student,
         ):
-            self.validator.add_course(course)
+            self.validator.add_course(enrolment.course)
 
-        new_proposed_courses: list[course] = []
-        for course in Course.objects.filter(
-            enrolment__student=self.student, enrolment__status=Enrolment.Status.PICKED
+        new_proposed_enrolments: list[Enrolment] = []
+        for enrolment in Enrolment.objects.filter(
+            student=self.student, status=Enrolment.Status.PICKED
         ):
-            self.validator.add_course(course)
+            self.validator.add_course(enrolment.course)
             if self.validator.is_valid():
-                new_proposed_courses.append(course)
+                new_proposed_enrolments.append(enrolment)
             else:
-                self.validator.remove_course(course)
+                self.validator.remove_course(enrolment.course)
         self.reset_validator()
-        return new_proposed_courses
+        return new_proposed_enrolments
