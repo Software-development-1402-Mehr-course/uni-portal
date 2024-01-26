@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import datetime, timedelta
 from functools import cache
 from typing import Optional
 
@@ -43,7 +42,10 @@ class BookListView(TemplateView):
             filter &= Q(name__icontains=name)
 
         if authors := data.get("authors"):
-            filter &= Q(authors__in=authors)
+            authors_filter = Q()
+            for author_name in authors.split(","):
+                authors_filter |= Q(authors__name=author_name.strip())
+            filter &= authors_filter
 
         if publish_year_from := data.get("publish_year_from"):
             filter &= Q(publish_date__year__gte=publish_year_from)
@@ -71,6 +73,7 @@ class BookListView(TemplateView):
         context["search_form"] = self.search_form
         context["books"] = self.get_books_query()[: self.page_size]
         context["rest_of_results_count"] = self.rest_of_results_count()
+        context["author_names"] = self.search_form.author_names()
 
         if HTMXHeaders.from_request(self.request) is not None:
             context["base"] = "content.html"

@@ -20,14 +20,11 @@
                    id="id_name"
                    value="{{ search_form.name.value|default:"" }}">
             <label for="id_authors" class="form-label">Authors:</label>
-            <select name="authors" class="form-select mb-3" id="id_authors" multiple="">
-                {% for author in search_form.authors.field.queryset %}
-                    <option value="{{ author.id }}"
-                            {% if author.id|stringformat:"d" in search_form.authors.value %}selected{% endif %}>
-                        {{ author.name }}
-                    </option>
-                {% endfor %}
-            </select>
+            <input type="text"
+                   name="authors"
+                   class="form-control mb-3"
+                   id="id_authors"
+                   value="{{ search_form.authors.value|default:"" }}">
             <div class="container p-0">
                 <div class="row">
                     <label for="id_publish_year_from" class="form-label col-auto">Publish year from:</label>
@@ -86,4 +83,52 @@
                 {% endif %}
             {% endblock %}
         </ul>
+    {% endblock %}
+    {% block scripts %}
+        <script>
+          $( function() {
+    var availableTags = [
+              {% for author_name in author_names %}"{{author_name}}",{% endfor %}
+      ];
+    function split( val ) {
+      return val.split( /,\s*/ );
+    }
+    function extractLast( term ) {
+      return split( term ).pop();
+    }
+ 
+    $( "input[name=authors]" )
+      // don't navigate away from the field on tab when selecting an item
+      .on( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).autocomplete( "instance" ).menu.active ) {
+          event.preventDefault();
+        }
+      })
+      .autocomplete({
+        minLength: 0,
+        source: function( request, response ) {
+          // delegate back to autocomplete, but extract the last term
+          response( $.ui.autocomplete.filter(
+            availableTags, extractLast( request.term ) ) );
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+          var terms = split( this.value );
+          // remove the current input
+          terms.pop();
+          // add the selected item
+          terms.push( ui.item.value );
+          // add placeholder to get the comma-and-space at the end
+          terms.push( "" );
+          this.value = terms.join( ", " );
+          return false;
+        }
+      });
+  } );
+
+        </script>
     {% endblock %}
