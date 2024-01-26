@@ -109,14 +109,14 @@ class BookReserveView(View):
 
 
 class BookTakeView(View):
-    def post(self, request, book_id: int):
+    def post(self, request, book_id: int, by_user:int):
         book: Book = Book.objects.get(id=book_id)
-        if not request.user.is_authenticated:
+        if not request.user.is_staff:
             return HttpResponse(
-                '<div class="alert alert-danger"> You are not logged in! </div>'
+                '<div class="alert alert-danger"> You are not staff! </div>'
             )
-        user_id = request.user.id
-        book.take(user_id)
+        user_id = by_user
+        book.take(user_id,remove_reservation=True)
         return HttpResponse(
             '<div class="alert alert-success"> Book borrowed successfully! </div>'
         )
@@ -142,7 +142,7 @@ class BookExtendView(View):
 class BookReturnView(View):
     def post(self, request, book_id: int):
         book: Book = Book.objects.get(id=book_id)
-        if request.user.id == book.taken_by.id:
+        if request.user.is_staff:
             book.return_back()
             return HttpResponse('<div class="alert alert-success"> Thank you! </div>')
         else:

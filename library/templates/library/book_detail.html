@@ -32,13 +32,22 @@
                                     hx-target="#borrow_status"
                                     hx-post="{% url 'book_extend' book_id=book.id %}"
                                     hx-trigger="click">Extend</button>
+                            <br>
+                            Current Fine: {{ book.current_fine }}
+			    {% if not book.reserved_by %}
+				     (1 per day)
+			    {% else %}
+				    (5 per day)
+			    {% endif %}
+			{% elif request.user.is_staff %}
+			    This is book is taken by {{ book.taken_by.username }}
                             <button type="button"
                                     class="btn btn-info"
                                     hx-target="#borrow_status"
                                     hx-post="{% url 'book_return' book_id=book.id %}"
                                     hx-trigger="click">Return</button>
-                            <br>
-                            Current Fine: {{ book.current_fine }}
+			    <br>
+
                         {% else %}
                             This book will be available at {{ book.return_due }}.
                             <button type="button"
@@ -53,11 +62,23 @@
                 <div id="borrow_status">
                     <div class="alert alert-primary" role="alert">
                         This book is available.
+			{% if not request.user.is_staff %}
                         <button type="button"
                                 class="btn btn-link"
                                 hx-target="#borrow_status"
-                                hx-post="{% url 'book_take' book_id=book.id %}"
-                                hx-trigger="click">Borrow Now!</button>
+                                hx-post="{% url 'book_reserve' book_id=book.id %}"
+                                hx-trigger="click">Borrow Request</button>
+			{% endif %}
+			{% if request.user.is_staff and book.reserved_by and not book.taken_by %}
+			<br>
+			{{ book.reserved_by.username }} Wants this book!
+                        <button type="button"
+                                class="btn btn-link"
+                                hx-target="#borrow_status"
+                                hx-post="{% url 'book_take' book_id=book.id by_user=book.reserved_by.id %}"
+                                hx-trigger="click">Accept</button>
+			{% endif %}
+
                     </div>
                 </div>
             {% endif %}
