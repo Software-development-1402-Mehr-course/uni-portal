@@ -8,22 +8,6 @@ package "library.apps" as library.apps #77AADD {
 }
 package "library.forms" as library.forms #77AADD {
 }
-package "library.migrations" as library.migrations #99DDFF {
-}
-package "library.migrations.0001_initial" as library.migrations.0001_initial #99DDFF {
-}
-package "library.migrations.0002_book_description_alter_book_reserved_by_and_more" as library.migrations.0002_book_description_alter_book_reserved_by_and_more #99DDFF {
-}
-package "library.migrations.0003_booklog" as library.migrations.0003_booklog #99DDFF {
-}
-package "library.migrations.0004_book_publish_date_alter_booklog_student" as library.migrations.0004_book_publish_date_alter_booklog_student #99DDFF {
-}
-package "library.migrations.0005_author_subject_remove_book_author_book_authors_and_more" as library.migrations.0005_author_subject_remove_book_author_book_authors_and_more #99DDFF {
-}
-package "library.migrations.0006_book_return_due_alter_book_reserved_by_and_more" as library.migrations.0006_book_return_due_alter_book_reserved_by_and_more #99DDFF {
-}
-package "library.migrations.0007_alter_booklog_log_type" as library.migrations.0007_alter_booklog_log_type #99DDFF {
-}
 package "library.models" as library.models #77AADD {
 }
 package "library.tests" as library.tests #77AADD {

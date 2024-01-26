@@ -1,0 +1,29 @@
+@startuml packages
+set namespaceSeparator none
+package "course.curriculum" as course.curriculum #77AADD {
+}
+package "course.curriculum.bind" as course.curriculum.bind #77AADD {
+}
+package "course.curriculum.token" as course.curriculum.token #77AADD {
+}
+package "course.curriculum.validators" as course.curriculum.validators #77AADD {
+}
+package "course.curriculum.validators.base_validator" as course.curriculum.validators.base_validator #77AADD {
+}
+package "course.curriculum.validators.credit_range_validator" as course.curriculum.validators.credit_range_validator #77AADD {
+}
+package "course.curriculum.validators.error" as course.curriculum.validators.error #77AADD {
+}
+package "course.curriculum.validators.prerequisites_validator" as course.curriculum.validators.prerequisites_validator #77AADD {
+}
+course.curriculum.bind --> course.curriculum.validators
+course.curriculum.validators --> course.curriculum.validators.base_validator
+course.curriculum.validators --> course.curriculum.validators.credit_range_validator
+course.curriculum.validators --> course.curriculum.validators.error
+course.curriculum.validators --> course.curriculum.validators.prerequisites_validator
+course.curriculum.validators.base_validator --> course.curriculum.validators.error
+course.curriculum.validators.credit_range_validator --> course.curriculum.validators.base_validator
+course.curriculum.validators.credit_range_validator --> course.curriculum.validators.error
+course.curriculum.validators.prerequisites_validator --> course.curriculum.validators.base_validator
+course.curriculum.validators.prerequisites_validator --> course.curriculum.validators.error
+@enduml
