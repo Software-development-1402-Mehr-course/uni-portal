@@ -31,7 +31,7 @@ class PrerequisitesValidator(BaseValidator):
         errs = []
 
         for invalid_item_id in self.invalid_item_ids:
-            message = f"Student hasn't passed {Course.objects.get(id=invalid_item_id).name} prerequisites."
+            message = f"Student hasn't passed {Course.objects.get(id=invalid_item_id)} prerequisites."
             ItemLevelError(item_id=invalid_item_id, message=message)
 
         return errs

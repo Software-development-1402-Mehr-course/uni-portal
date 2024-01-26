@@ -1,8 +1,10 @@
-from course.models import Course, Enrolment, Pick
+from course.curriculum.validators.error import ListLevelError
+from course.models import Course, Enrolment
 from user.models import Student
 
 from .base_validator import AbstractValidator
 from .credit_range_validator import MaxCreditValidator
+from .prerequisites_validator import PrerequisitesValidator
 
 
 class ValidatorFacade:
@@ -17,9 +19,9 @@ class ValidatorFacade:
 
     def student_valid_courses(self):
         valid_courses: list[Course] = []
-        for course in Course.objects.all():
+        for course in Course.objects.exclude(enrolment__student=self.student):
             self.validator.add_course(course)
-            if self.validator.is_valid():
+            if all(type(error) == ListLevelError for error in self.validator.errors()):
                 valid_courses.append(course)
 
             self.validator.remove_course(course)
@@ -34,8 +36,10 @@ class ValidatorFacade:
             self.validator.add_course(course)
 
         new_proposed_courses: list[course] = []
-        for pick in Pick.objects.filter(student=self.student).order_by("priority"):
-            self.validator.add_course(pick.course)
+        for course in Course.objects.filter(
+            enrolment__student=self.student, enrolment__status=Enrolment.Status.PICKED
+        ):
+            self.validator.add_course(course)
             if self.validator.is_valid():
                 new_proposed_courses.append(course)
             else:

@@ -1,0 +1,74 @@
+{% extends base|default:"base.html" %}
+{% block title %}Book List{% endblock %}
+{% block container %}
+    <label class="mt-3">Student valid courses</label>
+    <ul id="valid-list"
+        class="m-3 list-group connectedSortable ui-sortable border">
+        {% for course in valid_courses %}
+            <li class="ui-state-default ui-sortable-handle list-group-item d-flex justify-content-between">
+                <span>{{ course.subject.name }}</span>
+                <input type="number"
+                       style="width: 60px"
+                       value="0"
+                       min="0"
+                       id="course-{{ course.id }}" />
+            </li>
+        {% endfor %}
+    </ul>
+    <label calss="m-3">Student chosen courses</label>
+    <ul id="picked-list"
+        class="m-3 list-group connectedSortable ui-sortable border">
+        {% for enrolment in picked_enrolment %}
+            <li class="ui-state-default ui-sortable-handle list-group-item d-flex justify-content-between">
+                <span>{{ enrolment.course.subject.name }}</span>
+                <input type="number"
+                       style="width: 60px"
+                       min="0"
+                       id="course-{{ enrolment.course.id }}"
+                       value="{{ enrolment.tokens }}" />
+            </li>
+        {% endfor %}
+    </ul>
+    <button type="submit" class="m-3 btn btn-primary">Submit</button>
+{% endblock %}
+{% block scripts %}
+    <script>
+  var studentTokens = {{tokens}};
+  $("#valid-list").sortable({
+    connectWith: "#picked-list",
+    items: "> .ui-sortable-handle",
+    receive: (event, ui) => {ui.item.children("input").val(0)},
+  });
+  $("#picked-list").sortable({
+    connectWith: "#valid-list",
+    items: "> .ui-sortable-handle",
+  });
+  $("input[type=number]").on("keydown", (e) => e.preventDefault());
+  $("input[type=number]").change((ceEvent) => {
+    var sum = 0;
+    $("#picked-list > li > input").each((index, element) => {
+      sum += Number(element.value);
+    });
+    $("#picked-list > li > input").each((index, element) => {
+      element.max = studentTokens - sum + (element.value);
+    })
+  });
+
+  $("button").click(() => {
+    data = $("#picked-list > li > input").map((index, el) => {
+      return {id:el.id, val:el.value};
+    })
+    $.post(".", JSON.stringify(data.toArray()));
+  });
+    </script>
+{% endblock %}
+{% block styles %}
+    <style>
+  .list-group {
+    min-height: 100px;
+  }
+  #valid-list > li > input {
+    visibility: hidden;
+  }
+    </style>
+{% endblock %}

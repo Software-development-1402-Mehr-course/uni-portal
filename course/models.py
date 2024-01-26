@@ -14,6 +14,13 @@ class Course(models.Model):
     subject = models.ForeignKey(CourseSubject, on_delete=models.PROTECT)
     enrolment_cap = models.PositiveSmallIntegerField()
 
+    def picked(self, student: Student):
+        return bool(
+            Enrolment.object.filter(
+                course=self, student=student, status=Enrolment.Status.PICKED
+            )
+        )
+
 
 class CourseSession(models.Model):
     class Weekday(models.IntegerChoices):
@@ -47,12 +54,8 @@ class Enrolment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     status = models.IntegerField(choices=Status)
-
-
-class Pick(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     priority = models.PositiveSmallIntegerField()
+    tokens = models.PositiveSmallIntegerField()
 
     class Meta:
         unique_together = ["student", "priority"]
