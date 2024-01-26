@@ -160,12 +160,13 @@ class "library.apps.LibraryConfig" as library.apps.LibraryConfig #77AADD {
   name : str
 }
 class "library.forms.BookSearchForm" as library.forms.BookSearchForm #77AADD {
-  authors : ModelMultipleChoiceField
+  authors : CharField
   name : CharField
   publish_year_from : IntegerField
   publish_year_to : IntegerField
   search_phrase : CharField
   subjects : ModelMultipleChoiceField
+  author_names()
 }
 class "library.models.Author" as library.models.Author #77AADD {
   name : CharField
